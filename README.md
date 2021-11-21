@@ -11,7 +11,7 @@ python3 hw1_tester.py source_image target_image comparison_output blended_output
 where   `source_image` is the sample scene, ( Example: `../sample_scenes/outputs/bfc_on/monkey.ppm`) <br />
         `target_image` is the result of your code, ( Example `outputs/monkey.ppm`) <br />
         `comparison_output` is the result image that has been colored by the `color` given by the user <br />
-        `comparison_output` is the result image that has been colored by the difference of errorenous pixels<br />
+        `blended_output` is the result image that has been colored by the difference of errorenous pixels<br />
         `epsilon` is the acceptable int range for a pixel to be considered the same ( Exmaple: (255,255,255) == (255,254,254) ) <br />
         `color` is the color preferred by the user in order to change the color of different pixels in the source and target files <br />
 
