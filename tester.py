@@ -29,13 +29,14 @@ if __name__ == "__main__":
     target      = args[2]
     color       = None
     comp_path   = args[3]
-    epsilon     = int(args[4])
+    blend_path  = args[4]
+    epsilon     = int(args[5])
 
-    if len(args) > 6:
-        color = [int(args[5]), int(args[6]), int(args[7])]
+    if len(args) > 7:
+        color = [int(args[6]), int(args[7]), int(args[8])]
         assert color[0] <= 255 and color[1] <= 255 and color[2] <= 255, "The pixel is out of range"
     else:
-        color = eval("COLORS." + args[5]).value
+        color = eval("COLORS." + args[6]).value
         color = BAR_COLOR[color]
     
     source_d = None
@@ -55,6 +56,7 @@ if __name__ == "__main__":
     width           = int(width)
     pixel_limit     = int(source_d[2])
     result_image    = source_d[:3]
+    blend_image     = source_d[:3]
     source_d        = source_d[3:]
     target_d        = target_d[3:]
     succesfull      = 0
@@ -64,6 +66,7 @@ if __name__ == "__main__":
         src_row     = list(map(int,source_d[i].split()))
         target_row  = list(map(int,target_d[i].split()))
         result_row  = []
+        blend_row   = []
         for j in range(height):
             if  abs(src_row[j * 3]      - target_row[j * 3])        < epsilon   and \
                 abs(src_row[j * 3 + 1]  - target_row[j * 3 + 1])    < epsilon   and \
@@ -74,14 +77,22 @@ if __name__ == "__main__":
             else: # the pixel is wrong
                 result_row += color
                 error += 1
+            blend_row += [abs(src_row[j * 3]      - target_row[j * 3]), abs(src_row[j * 3 + 1]  - target_row[j * 3 + 1]), abs(src_row[j * 3 + 2]  - target_row[j * 3 + 2])]
         result_image.append(
             " ".join(list(map(str, result_row))) # convert every element into a string and join them.
         )
+        blend_image.append(
+            " ".join(list(map(str, blend_row)))
+        )
 
     print(f"Total pixel num -> {succesfull + error}")
-    print(f"Total sucessfull pixel -> {succesfull}")
+    print(f"Total successful pixel -> {succesfull}")
     print(f"Total erroroneus pixel -> {error}")
     print(f"The percentage of erroroneus pixel {error / (succesfull + error)}")
-    result = "\n".join(result_image)
+    result          = "\n".join(result_image)
+    blended_result  = "\n".join(blend_image)
     with open(comp_path, "w") as f:
         f.write(result)
+    
+    with open(blend_path, "w") as f:
+        f.write(blended_result)
